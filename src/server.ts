@@ -28,7 +28,7 @@ export default class Server extends EventEmitter {
       request.body = await this.collectMessageBody(req)
     } catch (error) {
       console.log(error)
-      req.destroy(new ProxyError('Error while fetching request body', ErrorType.unknown, error))
+      req.destroy(new ProxyError('Error while fetching request body', ErrorType.unknown, <Error>error))
       return
     }
 
@@ -90,7 +90,7 @@ export default class Server extends EventEmitter {
       if (contentEncoding) { response.headers['content-length'] = response.body.byteLength.toString() }
     } catch (error) {
       console.log(error)
-      proxyResponse.destroy(new ProxyError('Error while fetching response body', ErrorType.inconsistency, error))
+      proxyResponse.destroy(new ProxyError('Error while fetching response body', ErrorType.inconsistency, <Error>error))
       return
     }
 
