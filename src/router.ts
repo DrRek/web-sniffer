@@ -11,15 +11,25 @@ export default class Router {
     
     const requestOptions: http.RequestOptions = {
       host: request.hostname,
-      port: request.protocol === 'https:' ? 443 : 80,
+      port: request.port || (request.protocol === 'https:' ? 443 : 80),
       path: request.url,
       method: request.method,
       headers: request.headers
     }
 
     switch (request.protocol) {
-      case 'http:': return http.request(requestOptions, (response) => callback(response))
-      case 'https:': return https.request(requestOptions, (response) => callback(response))
+      case 'http:': 
+        const httpRequest = http.request(requestOptions, (response) => callback(response))
+        request.body && httpRequest.write(request.body)
+        return httpRequest
+      case 'https:': 
+        const httpsRequest = https.request({
+            ...requestOptions,
+            rejectUnauthorized: false,
+            agent: false
+        }, (response) => callback(response))
+        request.body && httpsRequest.write(request.body)
+        return httpsRequest
       default:  
       throw new ProxyError(
         `Unknown protocol ${request.protocol} received by the Router`,

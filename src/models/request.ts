@@ -12,6 +12,7 @@ export interface IRequest {
   body: Buffer
   remoteAddress: string
   size: number
+  port: number
   [key: string]: any
 }
 
@@ -20,6 +21,7 @@ export class Request extends RequestModel implements IRequest {
   method: string
   url: string
   query: any
+  port: number
 
   get fullUrl(): string { return `${this.protocol}//${this.hostname}${this.url}` }
   get hostname(): string {
@@ -36,5 +38,6 @@ export class Request extends RequestModel implements IRequest {
     this.url = url.parse(requestUrl!).path ?? ""
     this.query = url.parse(requestUrl!, true).query
     this.remoteAddress = socket.remoteAddress ?? ""
+    this.port = this.protocol == "http" ? 80 : 443
   }
 }
