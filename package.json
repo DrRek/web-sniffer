@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/index.js",
     "publish": "tsc && npm publish"
@@ -17,6 +18,7 @@
   },
   "dependencies": {
     "@types/pem": "^1.9.5",
-    "pem": "^1.14.4"
+    "pem": "^1.14.4",
+    "rimraf": "^3.0.2"
   }
 }
